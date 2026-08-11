@@ -1,0 +1,7 @@
+<?xml version='1.0' encoding='utf-8'?>
+<resources>
+    <string name="app_name">Chroniques de Cendre</string>
+    <string name="title_activity_main">Chroniques de Cendre</string>
+    <string name="package_name">com.mondonjon.chroniquesdecendre</string>
+    <string name="custom_url_scheme">com.mondonjon.chroniquesdecendre</string>
+</resources>
