@@ -193,6 +193,7 @@
 "use strict";
 try{
 console.log('[boot] IIFE principale demarree');
+const DEBUG_NO_WEBGL = true; // TEST: si true, saute le rendu 3D et colore le fond pour isoler le probleme
 
 
 /* =========================================================================
@@ -243,6 +244,11 @@ renderer.shadowMap.enabled = true;
 renderer.shadowMap.type = THREE.PCFSoftShadowMap;
 renderer.outputEncoding = THREE.sRGBEncoding;
 wrap.appendChild(renderer.domElement);
+if(DEBUG_NO_WEBGL){
+  renderer.domElement.style.display = 'none';
+  document.body.style.background = '#c0392b';
+  console.log('[boot] MODE TEST: canvas WebGL cache, fond rouge force pour verifier le HUD seul');
+}
 
 const scene = new THREE.Scene();
 console.log('[boot] scene creee, taille fenetre:', window.innerWidth, 'x', window.innerHeight);
@@ -828,7 +834,7 @@ function animate(){
   camPivot.position.lerp(lookAt, 1-Math.pow(0.001,dt));
   camera.lookAt(camPivot.position);
 
-  renderer.render(scene, camera);
+  if(!DEBUG_NO_WEBGL) renderer.render(scene, camera);
 }
 
 document.getElementById('loading').style.display='none';
