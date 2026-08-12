@@ -114,7 +114,7 @@
 </head>
 <body>
 
-<div id="loading"><div class="ring"></div>DESCENTE DANS LES CENDRES…</div>
+<div id="loading"><div class="ring"></div>DESCENTE DANS LES CENDRES...</div>
 
 <div id="canvas-wrap"></div>
 
@@ -152,21 +152,21 @@
   <div id="combat-log">Le combat commence !</div>
   <div id="combat-actions">
     <button class="cbtn" id="btn-atk">Attaque<small>0 MP</small></button>
-    <button class="cbtn" id="btn-skill">Compétence<small id="skill-cost">-- MP</small></button>
+    <button class="cbtn" id="btn-skill">Competence<small id="skill-cost">-- MP</small></button>
     <button class="cbtn" id="btn-flee">Fuir<small>&nbsp;</small></button>
   </div>
 </div>
 
 <div id="modal"><div class="modal-card">
   <h2 id="modal-title">Salle</h2>
-  <p id="modal-text">…</p>
+  <p id="modal-text">...</p>
   <button id="modal-btn">Continuer</button>
 </div></div>
 
 <script>
-  // rapport d'erreur visible à l'écran (indispensable pour déboguer une app installée,
-  // sans accès à la console) : toute erreur JS non interceptée s'affiche ici au lieu
-  // de laisser un écran noir muet.
+  // rapport d'erreur visible a l'ecran (indispensable pour deboguer une app installee,
+  // sans acces a la console) : toute erreur JS non interceptee s'affiche ici au lieu
+  // de laisser un ecran noir muet.
   window.addEventListener('error', function(e){
     var el = document.getElementById('loading');
     if(el){
@@ -178,8 +178,8 @@
 </script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
 <script>
-  // filet de sécurité si cdnjs est indisponible : on charge un CDN de secours en
-  // créant un vrai élément <script> (jamais document.write, qui peut effacer toute
+  // filet de securite si cdnjs est indisponible : on charge un CDN de secours en
+  // creant un vrai element <script> (jamais document.write, qui peut effacer toute
   // la page dans certains WebView).
   if (typeof THREE === 'undefined') {
     var fallback = document.createElement('script');
@@ -192,17 +192,18 @@
 (function(){
 "use strict";
 try{
+console.log('[boot] IIFE principale demarree');
 
 
 /* =========================================================================
-   CHRONIQUES DE CENDRE — reconstruction depuis le jeu Kotlin natif d'origine
-   Priorité de cette version : vrai système de salles + portes (Combat /
-   Piège / Trésor / Marchand / Repos / Boss), décor 3D réel, personnage
-   visible et animé. Un seul fichier HTML, comme Studiora — déployable via
+   CHRONIQUES DE CENDRE - reconstruction depuis le jeu Kotlin natif d'origine
+   Priorite de cette version : vrai systeme de salles + portes (Combat /
+   Piege / Tresor / Marchand / Repos / Boss), decor 3D reel, personnage
+   visible et anime. Un seul fichier HTML, comme Studiora - deployable via
    GitHub Pages + Capacitor.
    ========================================================================= */
 
-/* ---------------- Etat du héros (repris de la structure Hero du jeu Kotlin:
+/* ---------------- Etat du heros (repris de la structure Hero du jeu Kotlin:
    nom, hp, hpMax, mana, manaMax, atk, def, xp, niveau, arme, statut...) ---- */
 const Hero = {
   nom:"Guerrier", classe:"Guerrier",
@@ -212,20 +213,20 @@ const Hero = {
   regenMana:1
 };
 
-/* Types de salle retrouvés dans l'APK d'origine (enum TypeSalle) */
+/* Types de salle retrouves dans l'APK d'origine (enum TypeSalle) */
 const TypeSalle = {
   COMBAT:  {key:"COMBAT",  label:"Combat",   color:0xc93a3a, hud:"#c93a3a", desc:"Un ennemi bloque le passage."},
-  PIEGE:   {key:"PIEGE",   label:"Piège",    color:0xd6b23a, hud:"#d6b23a", desc:"Quelque chose ne va pas ici…"},
-  TRESOR:  {key:"TRESOR",  label:"Trésor",   color:0xc9a24b, hud:"#c9a24b", desc:"Un coffre scintille dans l'ombre."},
-  MARCHAND:{key:"MARCHAND",label:"Marchand", color:0x4b7bc9, hud:"#4b7bc9", desc:"Une silhouette encapuchonnée propose ses biens."},
-  REPOS:   {key:"REPOS",   label:"Repos",    color:0x6a9c3f, hud:"#6a9c3f", desc:"Un feu de camp brûle doucement."},
-  BOSS:    {key:"BOSS",    label:"Boss",     color:0x7c4fc9, hud:"#7c4fc9", desc:"Une présence massive attend au-delà."}
+  PIEGE:   {key:"PIEGE",   label:"Piege",    color:0xd6b23a, hud:"#d6b23a", desc:"Quelque chose ne va pas ici..."},
+  TRESOR:  {key:"TRESOR",  label:"Tresor",   color:0xc9a24b, hud:"#c9a24b", desc:"Un coffre scintille dans l'ombre."},
+  MARCHAND:{key:"MARCHAND",label:"Marchand", color:0x4b7bc9, hud:"#4b7bc9", desc:"Une silhouette encapuchonnee propose ses biens."},
+  REPOS:   {key:"REPOS",   label:"Repos",    color:0x6a9c3f, hud:"#6a9c3f", desc:"Un feu de camp brule doucement."},
+  BOSS:    {key:"BOSS",    label:"Boss",     color:0x7c4fc9, hud:"#7c4fc9", desc:"Une presence massive attend au-dela."}
 };
 
 const MONSTRES = [
   {nom:"Chauve-souris Magenta", hp:38, atk:9},
-  {nom:"Rôdeur des Cendres",    hp:52, atk:12},
-  {nom:"Golem Fissuré",         hp:70, atk:14},
+  {nom:"Rodeur des Cendres",    hp:52, atk:12},
+  {nom:"Golem Fissure",         hp:70, atk:14},
 ];
 const BOSS_LIST = [
   {nom:"Gardien du Cercle Rituel", hp:220, atk:22, boss:true}
@@ -233,7 +234,9 @@ const BOSS_LIST = [
 
 /* ================= THREE.JS SETUP ================= */
 const wrap = document.getElementById('canvas-wrap');
+console.log('[boot] script demarre, THREE dispo:', typeof THREE, 'GLTFLoader dispo:', !!(window.THREE && THREE.GLTFLoader));
 const renderer = new THREE.WebGLRenderer({antialias:true, powerPreference:'high-performance'});
+console.log('[boot] renderer cree, contexte webgl:', !!renderer.getContext());
 renderer.setPixelRatio(Math.min(window.devicePixelRatio,2));
 renderer.setSize(window.innerWidth, window.innerHeight);
 renderer.shadowMap.enabled = true;
@@ -242,6 +245,7 @@ renderer.outputEncoding = THREE.sRGBEncoding;
 wrap.appendChild(renderer.domElement);
 
 const scene = new THREE.Scene();
+console.log('[boot] scene creee, taille fenetre:', window.innerWidth, 'x', window.innerHeight);
 scene.fog = new THREE.FogExp2(0x040302, 0.045);
 scene.background = new THREE.Color(0x040302);
 
@@ -253,7 +257,7 @@ window.addEventListener('resize', ()=>{
   renderer.setSize(window.innerWidth, window.innerHeight);
 });
 
-/* ---- lumières ---- */
+/* ---- lumieres ---- */
 const ambient = new THREE.AmbientLight(0x2a2420, 0.55);
 scene.add(ambient);
 
@@ -294,7 +298,7 @@ function makeTorch(x,z){
   torchLights.push(group);
 }
 
-/* ---- sol : plateforme circulaire avec cercle rituel gravé ---- */
+/* ---- sol : plateforme circulaire avec cercle rituel grave ---- */
 const floorGroup = new THREE.Group();
 const stoneMat = new THREE.MeshStandardMaterial({color:0x3a352e, roughness:0.95, metalness:0.05});
 const floor = new THREE.Mesh(new THREE.CylinderGeometry(9,9.3,0.6,48), stoneMat);
@@ -354,7 +358,7 @@ for(let i=0;i<pillarCount;i++){
   if(i%2===0) makeTorch(px*0.86, pz*0.86);
 }
 
-/* particules de poussière dans le rayon de lumière */
+/* particules de poussiere dans le rayon de lumiere */
 const dustGeo = new THREE.BufferGeometry();
 const dustCount = 220;
 const dustPos = new Float32Array(dustCount*3);
@@ -367,7 +371,7 @@ dustGeo.setAttribute('position', new THREE.BufferAttribute(dustPos,3));
 const dust = new THREE.Points(dustGeo, new THREE.PointsMaterial({color:0xd8c9a3,size:0.02,transparent:true,opacity:0.35}));
 scene.add(dust);
 
-/* ================= PERSONNAGE (procédural, pas des triangles) ================= */
+/* ================= PERSONNAGE (procedural, pas des triangles) ================= */
 function buildHumanoid(primaryColor, accentColor){
   const g = new THREE.Group();
   const skin = new THREE.MeshStandardMaterial({color:0xcfa87a, roughness:0.8});
@@ -414,10 +418,10 @@ function buildHumanoid(primaryColor, accentColor){
   return g;
 }
 
-/* ---- chargement du vrai modèle riggé (.glb, squelette mixamorig) avec
-   repli automatique sur le personnage procédural si le modèle est absent
+/* ---- chargement du vrai modele rigge (.glb, squelette mixamorig) avec
+   repli automatique sur le personnage procedural si le modele est absent
    ou ne charge pas ---- */
-const HERO_MODEL_URL = 'assets/models/guerrier.glb'; // à placer dans le dépôt (voir commandes Termux)
+const HERO_MODEL_URL = 'assets/models/guerrier.glb'; // a placer dans le depot (voir commandes Termux)
 const BONE_NAMES = {
   hips:'mixamorig:Hips', spine:'mixamorig:Spine',
   armL:'mixamorig:LeftArm', armR:'mixamorig:RightArm',
@@ -461,10 +465,10 @@ if(window.THREE && THREE.GLTFLoader){
   loader.load(HERO_MODEL_URL, (gltf)=>{
     const model = gltf.scene;
     model.traverse(o=>{ if(o.isMesh){ o.castShadow=true; o.receiveShadow=true; } });
-    player.add(model);              // ajouté à la scène AVANT tout calcul de taille
-    model.updateMatrixWorld(true);  // force Three.js à calculer les vraies positions/tailles
+    player.add(model);              // ajoute a la scene AVANT tout calcul de taille
+    model.updateMatrixWorld(true);  // force Three.js a calculer les vraies positions/tailles
 
-    // recentrer et mettre à l'échelle sur une hauteur d'environ 1.75m
+    // recentrer et mettre a l'echelle sur une hauteur d'environ 1.75m
     const box = new THREE.Box3().setFromObject(model);
     const size = new THREE.Vector3(); box.getSize(size);
     const scale = size.y>0 ? 1.75/size.y : 1;
@@ -479,15 +483,15 @@ if(window.THREE && THREE.GLTFLoader){
     player.userData.mode = 'rigged';
     player.userData.ready = true;
   }, undefined, (err)=>{
-    console.warn('Modèle héros introuvable, repli sur le personnage procédural.', err);
+    console.warn('Modele heros introuvable, repli sur le personnage procedural.', err);
     attachProceduralFallback();
   });
 } else {
   attachProceduralFallback();
 }
 
-/* caméra tierce personne, ancrée derrière le héros — pas d'orbit libre,
-   juste un suivi doux pour garder les repères avant/arrière clairs */
+/* camera tierce personne, ancree derriere le heros - pas d'orbit libre,
+   juste un suivi doux pour garder les reperes avant/arriere clairs */
 let camYaw = Math.PI;
 const camPivot = new THREE.Object3D();
 scene.add(camPivot);
@@ -597,8 +601,7 @@ function buildDoor(type){
 }
 
 spawnDoors();
-
-/* ---- prompt & bouton d'interaction ---- */
+console.log('[boot] portes generees:', doors.length);
 const doorPrompt = document.getElementById('door-prompt');
 const doorTypeTxt = document.getElementById('door-type-txt');
 const interactBtn = document.getElementById('interact-btn');
@@ -638,7 +641,7 @@ function enterDoor(door){
 interactBtn.addEventListener('click', ()=>{ if(nearDoor) enterDoor(nearDoor); });
 interactBtn.addEventListener('touchstart', (e)=>{ e.preventDefault(); if(nearDoor) enterDoor(nearDoor); },{passive:false});
 
-/* ---- résolution d'une salle selon son type ---- */
+/* ---- resolution d'une salle selon son type ---- */
 const modal = document.getElementById('modal');
 const modalTitle = document.getElementById('modal-title');
 const modalText = document.getElementById('modal-text');
@@ -667,16 +670,16 @@ function resolveRoom(type){
       const dmg = 8 + Math.floor(Math.random()*10);
       Hero.hp = Math.max(1, Hero.hp - dmg);
       refreshHUD();
-      showModal('Piège !', `Une lame surgit du mur. -${dmg} HP.`, nextLevel);
+      showModal('Piege !', `Une lame surgit du mur. -${dmg} HP.`, nextLevel);
       break;
     }
     case 'TRESOR': {
       const or = 20 + Math.floor(Math.random()*60);
-      showModal('Trésor', `Le coffre s'ouvre : +${or} or.`, nextLevel);
+      showModal('Tresor', `Le coffre s'ouvre : +${or} or.`, nextLevel);
       break;
     }
     case 'MARCHAND': {
-      showModal('Le Marchand', 'Potions de Mana et objets disponibles à l\'achat.', nextLevel);
+      showModal('Le Marchand', 'Potions de Mana et objets disponibles a l\'achat.', nextLevel);
       break;
     }
     case 'REPOS': {
@@ -700,7 +703,7 @@ function startCombat(base){
   monster = {nom:base.nom, hp:base.hp, hpMax:base.hp, atk:base.atk, boss:!!base.boss};
   mName.textContent = monster.nom;
   mHpBar.style.width='100%';
-  combatLog.textContent = monster.boss ? 'Le Gardien se dresse devant vous !' : 'Un ennemi apparaît !';
+  combatLog.textContent = monster.boss ? 'Le Gardien se dresse devant vous !' : 'Un ennemi apparait !';
   currentRoomCleared = false;
   combatEl.classList.add('active');
 }
@@ -719,7 +722,7 @@ function endCombatDefeat(){
   refreshHUD();
   document.getElementById('niveau-n').textContent = Hero.niveau;
   currentRoomCleared = true;
-  showModal('Défaite…', 'Vous reculez d\'un niveau pour reprendre des forces.', ()=>{ spawnDoors(); });
+  showModal('Defaite...', 'Vous reculez d\'un niveau pour reprendre des forces.', ()=>{ spawnDoors(); });
 }
 
 document.getElementById('btn-atk').addEventListener('click', ()=>playerAttack(false));
@@ -745,7 +748,7 @@ function monsterAttack(){
   const dmg = Math.max(1, monster.atk - Math.floor(Hero.def*0.4) + Math.floor(Math.random()*5));
   Hero.hp = Math.max(0, Hero.hp - dmg);
   refreshHUD();
-  combatLog.textContent += ` — riposte: -${dmg} HP`;
+  combatLog.textContent += ` - riposte: -${dmg} HP`;
   if(Hero.hp<=0){ setTimeout(endCombatDefeat, 400); }
 }
 
@@ -829,7 +832,9 @@ function animate(){
 }
 
 document.getElementById('loading').style.display='none';
+console.log('[boot] lancement de la boucle animate()');
 animate();
+console.log('[boot] premier appel a animate() effectue');
 
 } catch(err){
   var el = document.getElementById('loading');
